@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Components</title>
+
+    <script src="/bundle.js"></script>
+    <script>
+        // Toutes les 3 secondes, appeler /devModeStatus et si ce n'est pas égal à la valeur actuelle, recharger la page
+        let devModeStatus= null;
+        setInterval(async () => {
+            let newDevModeStatus = await fetch('/devModeStatus').then(res => res.text());
+            if (devModeStatus === null) {
+                devModeStatus = newDevModeStatus;
+            } else {
+                if (newDevModeStatus !== devModeStatus) {
+                    location.reload();
+                }
+            }
+        }, 10);
+    </script>
+</head>
+<body>
+    {{ W13C_PAGE_CONTENT }}
+</body>
+</html>

@@ -1,63 +1,68 @@
 import { aggregateComponent, isManifestValid, isNameValid, readManifest } from "@/core/component.core";
-import { urnDestructered } from "@/core/resolve.core";
-import { getPackageFromRepository } from "@/data/external/repository.external.data";
-import { archiveAlreadyExists, writeArchiveToDistComponentsFolder, openArchive, existsComponentElement, getLocalComponents, readComponentElement, writeWebComponentBundle } from "@/data/local/component.local.data";
-import { readResolveFileContentJson, writeResolveFileContentJson } from "@/data/local/resolve.local.data";
-import { copyDefaultComponent } from "@/data/local/resources.local.data";
+import { redefineWebComponentClass, urnDestructered } from "@/core/resolve.core";
+import { getPackageFromRepository } from "@/data/fetch/getPackageFromRepository";
+import { getConfig } from "@/data/fs/getConfig";
+import { getLocalComponents } from "@/data/fs/getLocalComponents";
+import { dirExists, fileExists, readJsonFromFile, readTextFromFile, writeJsonToFile, writeTextToFile } from "@/lib/file.lib";
+import { extractAllFilesFromTar } from "@/lib/tar.lib";
+import path from "node:path";
 
-export async function createComponent(name: string){
-    if ( !isNameValid(name) ){
-        throw new Error("Component name is not valid. Use only lowercase letters and hyphens.", { cause: 'invalid-name' });
-    };
-    const resolveContent = await readResolveFileContentJson();
-    if ( resolveContent[name] ){
-        throw new Error(`Component with name ${name} already exists in resolve.json.`, { cause: 'component-already-exists' });
-    }
-    resolveContent[name] = "local/" + name + "@0.0.0";
-    await writeResolveFileContentJson(resolveContent);
-    await copyDefaultComponent(name);
-}
-
+// Import component from repository
 export async function importComponent(name: string, urn: string) {
+    const CONFIG = await getConfig();
+    if ( !isNameValid(name) ) {
+        throw new Error(`Component name ${name} is not valid.`, { cause: 'invalid-component-name' });
+    }
+
     const urnDest = urnDestructered(urn);
 
-    if ( await archiveAlreadyExists(urnDest) ) return;
+    const pathToComponent = path.join(CONFIG.components.external, urnDest.namespace, urnDest.componentName, urnDest.version);
 
-    const actualJSON = await readResolveFileContentJson();
+    if ( await dirExists(pathToComponent) ) {
+        throw new Error(`Component ${name} already exists locally.`, { cause: 'component-already-exists-locally' });
+    }
+
+    const actualJSON = await readJsonFromFile(CONFIG.components.resolveFile) as Record<string, string>;
     actualJSON[name] = urn;
 
-    const archiveContent = await getPackageFromRepository(urnDest);
+    const archiveContent = await getPackageFromRepository(urnDest, CONFIG.components.repository);
 
 
-    await writeResolveFileContentJson(actualJSON);
-    writeArchiveToDistComponentsFolder(urnDest, archiveContent);
-    openArchive(urnDest);
+    await writeJsonToFile(CONFIG.components.resolveFile, actualJSON);
+    await writeTextToFile(path.join(pathToComponent, 'archive.zip'), archiveContent);
+    extractAllFilesFromTar(path.join(pathToComponent, 'archive.zip'), pathToComponent);
 }
 
+// Publish component to repository
 export async function publishComponent() {
     return;
 }
 
-export async function buildComponent() {
-    const localComponents = getLocalComponents();
+// Check validity of component and build it
+export async function bundleLocalComponents() {
+
+    let ret = "";
+
+    const CONFIG = await getConfig();
+    const localComponents = await getLocalComponents(CONFIG.components.local);
+
     for ( const component of localComponents ) {
 
-        if ( !await existsComponentElement(component, 'manifest.json') ) continue;
-        const manifest = await readComponentElement(component, 'manifest.json');
+        if ( !await fileExists(path.join(component, 'manifest.json')) ) continue;
+        const manifest = await readTextFromFile(path.join(component, 'manifest.json'));
         const manifestJSON = readManifest(manifest);
 
-        if ( !isManifestValid(manifest) ) continue;
+        if ( !isManifestValid(manifestJSON) ) continue;
 
-        const htmlContent = await readComponentElement(component, manifestJSON.htmlFiles);
-        const cssContent = await readComponentElement(component, manifestJSON.cssFiles);
-        const jsContent = await readComponentElement(component, manifestJSON.coreFiles);
+        const htmlContent = await readTextFromFile(path.join(component, manifestJSON.htmlFiles));
+        const cssContent = await readTextFromFile(path.join(component, manifestJSON.cssFiles));
+        const jsContent = await readTextFromFile(path.join(component, manifestJSON.coreFiles));
 
         const aggregatedContent = aggregateComponent(htmlContent, cssContent, jsContent);
+        const redefinedContent = redefineWebComponentClass(aggregatedContent, manifestJSON.name, "local-");
 
-        await writeWebComponentBundle({ 
-            componentName: component, 
-            namespace: manifestJSON.namespace, 
-            version: manifestJSON.version 
-        }, aggregatedContent);
+        ret += `\n// ---- Component ${manifestJSON.name} ---- \n` + redefinedContent + `\n// ---- End Component ${manifestJSON.name} ---- \n`;
     }
+
+    return ret;
 }

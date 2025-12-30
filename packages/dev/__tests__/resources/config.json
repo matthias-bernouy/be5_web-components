@@ -1,0 +1,16 @@
+{
+    "website": {
+        "404": "e/404.html",
+        "output": ".dist/",
+        "source": "website/",
+        "port": 8080
+    },
+    "components": {
+        "prefix": "prefix-",
+        "external": "external/components/",
+        "local": "local/components",
+        "output": ".dist/bundle.js",
+        "resolveFile": "resolve.json",
+        "repository": "https://cdn.web-components.fr"
+    }
+}

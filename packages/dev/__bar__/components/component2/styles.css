@@ -1,0 +1,27 @@
+/** 
+*
+* For a good component, you should make the component be able to personalize its style via CSS variables.
+* Also, you should use position-anchor to make sure the component is well positioned in any context.
+*
+*/
+
+:host{
+    display: block;
+    box-sizing: border-box;
+
+    /* Variables here */
+}
+
+/* Styles for your components */
+
+/* Styles for slotted elements */
+::slotted(*){
+    display: block;
+}
+
+/* Styles for slotted elements which slot name is "header" */
+::slotted([slot="header"]){
+    font-weight: bold;
+    font-size: 1.5em;
+    margin-bottom: 0.5em;
+}

@@ -1,0 +1,35 @@
+/** 
+*
+* For a good component, you should make the component be able to personalize its style via CSS variables.
+* Also, you should use position-anchor to make sure the component is well positioned in any context.
+*
+*/
+
+:host{
+    display: block;
+    box-sizing: border-box;
+
+    /* Variables here */
+}
+
+/* Styles for your components */
+.card{
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    width: max(20vw, 200px);
+}
+
+/* Styles for slotted elements */
+::slotted(*){
+    display: block;
+}
+
+/* Styles for slotted elements which slot name is "header" */
+::slotted([slot="header"]){
+    font-weight: bold;
+    font-size: 1.5em;
+    margin-bottom: 0.5em;
+}

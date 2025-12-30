@@ -1,15 +1,20 @@
-# @be5/web-components-dev
+# Structure
 
-To install dependencies:
+## src/data
+-> Fetch 
+-> RW on file system
+-> Resources
 
-```bash
-bun install
-```
+The folder is the only available to do these actions.
 
-To run:
+## src/core
+-> Only pure functions
 
-```bash
-bun run index.ts
-```
+## src/entry/service
+-> Can use all the src/core, src/data and src/lib functions
 
-This project was created using `bun init` in bun v1.3.4. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+## src/entry/bin
+-> For the CLI
+
+## src/lib
+-> For connectors with external libraries

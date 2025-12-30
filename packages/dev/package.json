@@ -20,7 +20,10 @@
   ],
   "scripts": {
     "tsc:build": "tsc",
-    "bun:tests": "bun test ./__tests__ --randomize --rerun-each 10"
+    "bun:tests": "bun test ./__tests__ --randomize --rerun-each 10",
+
+    "w13c:bin": "bun src/entry/bin/bin.ts"
+    
   },
   "dependencies": {
     "commander": "^14.0.2",

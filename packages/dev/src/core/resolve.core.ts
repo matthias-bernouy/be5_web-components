@@ -1,5 +1,3 @@
-import { CONFIG } from "../data/local/config.local.data";
-
 export function redefineWebComponentClass(jsContent: string, name: string, prefix: string) {
     const className = `w13c_${name.replace(/-/g, "_")}`;
 

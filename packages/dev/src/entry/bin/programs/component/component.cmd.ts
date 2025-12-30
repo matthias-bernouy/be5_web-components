@@ -1,7 +1,6 @@
 import { Command } from 'commander';
 import { componentAddCommand } from './component-import.cmd';
 import { componentPublishCommand } from './component-publish.cmd';
-import { componentCreateCommand } from './component-create.cmd';
 
 export function componentCommand() {
 
@@ -9,6 +8,5 @@ export function componentCommand() {
     .description('Manage web components')
     .addCommand(componentAddCommand())
     .addCommand(componentPublishCommand())
-    .addCommand(componentCreateCommand())
 
 }
