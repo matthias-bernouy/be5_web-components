@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "lib": ["ESNext", "DOM"], // Ajoute DOM si tu fais des Web Components
+    "target": "ESNext",
+    "module": "ES2022",
+    "moduleDetection": "force",
+    "jsx": "react-jsx",
+    "allowJs": true,
+
+    // --- CONFIGURATION POUR BIBLIOTHÈQUE ---
+    "declaration": true,                // Génère les fichiers .d.ts
+    "emitDeclarationOnly": false,        // Ne génère QUE les types (Bun s'occupe du JS)
+    "outDir": "dist",                   // Envoie les types dans le dossier /dist
+    "noEmit": false,                    // DOIT ÊTRE FALSE pour générer les fichiers
+    
+    // Indispensable pour Bun
+    "moduleResolution": "bundler",
+    // "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+
+    "strict": true,
+    "skipLibCheck": true,
+
+    "declarationDir": "dist",
+    "declarationMap": true,
+    
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src", "types", "__tests__"]
+}

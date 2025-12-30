@@ -1,0 +1,7 @@
+{
+    "namespace": "be5",
+
+    "directories": {  
+        "localComponents": "./local-components/"
+    }
+}

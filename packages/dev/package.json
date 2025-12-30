@@ -1,0 +1,29 @@
+{
+  "name": "web-components-dev",
+  "version": "1.0.0",
+  "main": "./dist/declaration.js",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "chalk": "^5.6.2",
+    "inquirer": "^13.1.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "bin": {
+    "w13c": "./dist/bin.js"
+  },
+  "files": [
+    "dist/",
+    "src"
+  ],
+  "scripts": {
+    "tsc:build": "tsc",
+    "bun:tests": "bun test ./__tests__ --randomize --rerun-each 10"
+  },
+  "dependencies": {
+    "commander": "^14.0.2",
+    "tar": "^7.5.2"
+  }
+}
