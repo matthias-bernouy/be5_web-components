@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Components</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+    </style>
+    <script>
+        const ws = new WebSocket(`ws://localhost:8081`);
+        ws.addEventListener("message", (e) => {
+            if ( e.data === "reload" ) {
+                location.reload();
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <h1>Web Components Creator - Home</h1>
+    <main>
+        <ul>
+            <!-- {{ components_list }} -->
+        </ul>
+    </main>
+
+</body>
+
+</html>

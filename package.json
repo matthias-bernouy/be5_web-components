@@ -1,0 +1,25 @@
+{
+	"name": "wc",
+	"type": "module",
+	"version": "1.0.0",
+	"workspaces": [
+		"packages/*"
+	],
+	"devDependencies": {
+		"@biomejs/biome": "^2.3.11",
+		"@types/bun": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "^5"
+	},
+	"scripts": {
+		"build:all": "bun src/build/index.ts",
+		"start:creator": "bun ./build/creator/index.js",
+		"dev:creator": "bun run --hot packages/wc-creator/index.ts",
+		"dev:repository": "bun run --watch packages/wc-repository/index.ts",
+		"lint": "biome lint .",
+		"check": "biome check .",
+		"lint:fix": "biome check . --fix",
+		"format": "biome format . --write"
+	}
+}

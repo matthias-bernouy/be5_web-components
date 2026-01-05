@@ -1,0 +1,26 @@
+{
+	"compilerOptions": {
+		"lib": ["ESNext"],
+		"rootDir": ".",
+		"baseUrl": ".",
+		"outDir": "./dist",
+		"target": "ESNext",
+		"module": "Preserve",
+		"moduleDetection": "force",
+		"allowJs": true,
+		"moduleResolution": "bundler",
+		"verbatimModuleSyntax": true,
+		"strict": true,
+		"skipLibCheck": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedIndexedAccess": true,
+		"noImplicitOverride": true,
+		"declaration": true,
+		"declarationMap": true,
+		"esModuleInterop": true,
+		"noEmit": false,
+		"composite": true,
+		"emitDeclarationOnly": true
+	},
+	"include": ["**/*.d.ts", "**/*.ts"]
+}

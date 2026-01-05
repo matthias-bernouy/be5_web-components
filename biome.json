@@ -1,0 +1,57 @@
+{
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"style": {
+				"noRestrictedImports": {
+					"level": "error",
+					"options": {
+						"patterns": [
+							{
+								"group": [
+									"node:*",
+									"path",
+									"fs",
+									"os",
+									"crypto"
+								],
+								"message": "Les modules natifs Node.js sont interdits. Utilisez les utilitaires de 'wc-shared'."
+							}
+						]
+					}
+				}
+			},
+			"correctness": {
+				"noUndeclaredDependencies": {
+					"options": {
+						"devDependencies": [
+							"**/test/**",
+							"**/tests/**",
+							"**/*.test.*",
+							"**/*.spec.*",
+							"packages/wc-shared/**"
+						]
+					}
+				},
+				"noUnusedVariables": "error"
+			},
+			"complexity": {
+				"noStaticOnlyClass": "off"
+			}
+		}
+	},
+	"overrides": [
+		{
+			"includes": [
+				"packages/wc-shared/**"
+			],
+			"linter": {
+				"rules": {
+					"style": {
+						"noRestrictedImports": "off"
+					}
+				}
+			}
+		}
+	]
+}

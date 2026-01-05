@@ -1,9 +1,0 @@
-{
-    "namespace": "local",
-    "version": "0.0.0",
-    "name": "component2",
-
-    "cssFiles": "styles.css",
-    "htmlFiles": "template.html",
-    "coreFiles": "core.js"
-}
