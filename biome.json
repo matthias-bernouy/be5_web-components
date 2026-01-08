@@ -15,10 +15,15 @@
 									"os",
 									"crypto"
 								],
-								"message": "Les modules natifs Node.js sont interdits. Utilisez les utilitaires de 'wc-shared'."
+								"message": "Native Node.js modules are forbidden. Use the utilities from 'wc-shared'."
 							}
 						]
 					}
+				}
+			},
+			"suspicious": {
+				"noExplicitAny": {
+					"level": "off"
 				}
 			},
 			"correctness": {

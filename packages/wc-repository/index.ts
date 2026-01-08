@@ -1,3 +1,6 @@
-import { validateNamespace } from "@shared";
+import { Config } from "./src/core/Config";
+import { startRepositoryServer } from "./src/server";
 
-validateNamespace("exampleNamespace", 55);
+Config.initialize();
+
+startRepositoryServer();

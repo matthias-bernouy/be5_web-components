@@ -1,5 +1,4 @@
-import { watch } from "node:fs";
-import { serveStaticFiles, startWebSocket } from "@shared";
+import { serveStaticFiles, startWebSocket, Watcher } from "@shared";
 import { Config } from "../core/object/Config";
 import { Controller } from "../core/object/Controller";
 
@@ -43,27 +42,31 @@ export async function startCreatorDev() {
 		return { content: `UNDEFINED PATH: ${dest}` };
 	});
 
-	const startWatch = () => {
-		const w = watch(
-			Config.cwd,
-			{ recursive: true },
-			async (eventType, _filename: any) => {
-				console.log("CHANGE DETECTED:", eventType);
-				await new Promise((res) => setTimeout(res, 1000));
-				await Controller.loadComponents();
-				await homePage.load();
-				const formatDate = new Date(Date.now() - started)
-					.toISOString()
-					.slice(11, 19);
-				console.info(`[ ${formatDate} ] Reloading... `);
-				reloading();
-				if (eventType === "rename") {
-					w.close();
-					startWatch();
-				}
-			},
-		);
+	const watcher = new Watcher(Config.cwd);
+
+	const watchHandle = async () => {
+		await new Promise((res) => setTimeout(res, 1000));
+		await Controller.loadComponents();
+		await homePage.load();
+		const formatDate = new Date(Date.now() - started)
+			.toISOString()
+			.slice(11, 19);
+		console.info(`[ ${formatDate} ] Reloading... `);
+		reloading();
 	};
 
-	startWatch();
+	watcher.on("add", (path) => {
+		console.log("File changed:", path);
+		watchHandle();
+	});
+
+	watcher.on("change", (path) => {
+		console.log("File changed:", path);
+		watchHandle();
+	});
+
+	watcher.on("unlink", (path) => {
+		console.log("File changed:", path);
+		watchHandle();
+	});
 }

@@ -1,4 +1,4 @@
-import path from "node:path";
+import { dirname, resolve } from "@shared";
 
 export class Config {
 	public static port: number;
@@ -15,8 +15,8 @@ export class Config {
 		Config.repository =
 			process.env.REPOSITORY ?? "https://cdn.web-components.fr";
 		Config.cwd = process.env.CWD ?? process.cwd();
-		Config.cwd_module = path.resolve(
-			path.dirname(import.meta.url.replace("file://", "")),
+		Config.cwd_module = resolve(
+			dirname(import.meta.url.replace("file://", "")),
 			"../../../",
 		);
 		return Promise.resolve();

@@ -1,0 +1,41 @@
+{
+	"compilerOptions": {
+		"lib": ["ESNext"],
+		"target": "ESNext",
+		"module": "Preserve",
+		"moduleDetection": "force",
+		"moduleResolution": "bundler",
+
+		"allowJs": true,
+		"verbatimModuleSyntax": true,
+		"esModuleInterop": true,
+
+		"strict": true,
+		"skipLibCheck": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedIndexedAccess": true,
+		"noImplicitOverride": true,
+
+		"declaration": true,
+		"declarationMap": true,
+		"noEmit": true,
+		"composite": true,
+
+		"types": [],
+		"typeRoots": [],
+
+		"rootDir": ".",
+		"baseUrl": ".",
+
+		"paths": {
+			"@shared": ["./packages/wc-shared/index.ts"]
+		}
+	},
+
+	"files": [
+		"./packages/wc-shared/index.ts",
+		"./packages/wc-shared/types/declaration.d.ts"
+	],
+
+	"include": ["src/**/*.ts", "__scripts__/**/*.ts"]
+}

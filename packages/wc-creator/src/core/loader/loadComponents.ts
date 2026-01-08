@@ -1,6 +1,11 @@
 import { readdir } from "node:fs/promises";
-import path from "node:path";
-import { fileExists, type ManifestType, readJsonFromFile } from "@shared";
+import {
+	fileExists,
+	join,
+	type ManifestType,
+	readJsonFromFile,
+	relative,
+} from "@shared";
 import default_layout from "../../../data/preview_layout.html";
 import { Component } from "../object/Component";
 import { Config } from "../object/Config";
@@ -18,17 +23,13 @@ export async function loadComponents() {
 }
 
 async function fnRec(dir: string): Promise<Record<string, Component>> {
-	const manifestPath = path.join(dir, "manifest.json");
+	const manifestPath = join(dir, "manifest.json");
 
 	if (await fileExists(manifestPath)) {
 		const content = (await readJsonFromFile(manifestPath)) as ManifestType;
 		const key = `${content.namespace}/${content.tag}@${content.version}`;
 		return {
-			[key]: new Component(
-				content,
-				path.relative(Config.cwd, dir),
-				default_layout,
-			),
+			[key]: new Component(content, relative(Config.cwd, dir), default_layout),
 		};
 	}
 
@@ -41,7 +42,7 @@ async function fnRec(dir: string): Promise<Record<string, Component>> {
 				!entry.name.startsWith(".") &&
 				entry.name !== "node_modules",
 		)
-		.map((entry) => fnRec(path.join(dir, entry.name)));
+		.map((entry) => fnRec(join(dir, entry.name)));
 
 	const results = await Promise.all(tasks);
 

@@ -1,6 +1,6 @@
-import path from "node:path";
 import {
 	fileExists,
+	join,
 	type ManifestType,
 	readTextFromFile,
 	validateManifest,
@@ -59,7 +59,7 @@ export class Component {
 	}
 
 	async getAsset(fileName: string) {
-		const pathAssets = path.join(Config.cwd, this.path, fileName);
+		const pathAssets = join(Config.cwd, this.path, fileName);
 		if (!fileExists(pathAssets)) return null;
 		return pathAssets;
 	}
@@ -67,13 +67,13 @@ export class Component {
 	async loadScript(tag?: string) {
 		const className = `w13c_${(tag ?? this.manifest.tag).replace(/-/g, "_")}`;
 		const html = await readTextFromFile(
-			path.join(Config.cwd, this.path, this.manifest.htmlFile),
+			join(Config.cwd, this.path, this.manifest.htmlFile),
 		);
 		const css = await readTextFromFile(
-			path.join(Config.cwd, this.path, this.manifest.cssFile),
+			join(Config.cwd, this.path, this.manifest.cssFile),
 		);
 		let js = await readTextFromFile(
-			path.join(Config.cwd, this.path, this.manifest.jsFile),
+			join(Config.cwd, this.path, this.manifest.jsFile),
 		);
 
 		js = js
@@ -109,7 +109,7 @@ export class Component {
 	}
 
 	async loadPreview() {
-		const componentPreview = path.join(
+		const componentPreview = join(
 			Config.cwd,
 			this.path,
 			this.manifest.previewFile,
