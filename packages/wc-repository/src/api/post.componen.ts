@@ -66,5 +66,5 @@ export async function POST_Component(req: HTTPRequest): Promise<Response> {
 	);
 
 	del(`${Config.cwdModule}/tmp/${reqID}/`);
-	return new Response("POST_Component response");
+	return new Response();
 }

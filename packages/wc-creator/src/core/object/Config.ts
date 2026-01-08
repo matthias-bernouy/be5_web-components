@@ -6,6 +6,7 @@ export class Config {
 	public static cwd: string;
 	public static cwd_module: string;
 	public static cachePath: string;
+	public static resolveConfigPath: string;
 
 	static async initialize() {
 		if (process.env.CREATOR_PORT === undefined) {
@@ -13,14 +14,17 @@ export class Config {
 		} else {
 			Config.port = parseInt(process.env.CREATOR_PORT, 10);
 		}
+
 		Config.cachePath = join(process.env.HOME || "", ".cache", "web-components");
 		Config.repository =
 			process.env.REPOSITORY_URL ?? "https://cdn.web-components.fr";
-		Config.cwd = process.env.CWD ?? process.cwd();
+		// Prblm CWD, si pas absolute ?
+		Config.cwd = resolve(process.env.CWD ?? process.cwd());
 		Config.cwd_module = resolve(
 			dirname(import.meta.url.replace("file://", "")),
 			"../../../",
 		);
+		Config.resolveConfigPath = join(Config.cwd, "resolve.json");
 		return Promise.resolve();
 	}
 
@@ -30,6 +34,7 @@ export class Config {
   - repository: ${Config.repository}
   - cache_path: ${Config.cachePath}
   - cwd: ${Config.cwd}
+  - resolve_config_path: ${Config.resolveConfigPath}
   - cwd_module: ${Config.cwd_module}`;
 	}
 }

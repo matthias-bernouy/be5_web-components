@@ -1,5 +1,5 @@
 import { CLICommand } from "@shared";
-import { startCreatorDev } from "../../service/creator.dev.service";
+import { startCreatorDev } from "../../service/dev.service";
 
 export function creatorDevCLI(): CLICommand {
     const cli = new CLICommand("dev");
