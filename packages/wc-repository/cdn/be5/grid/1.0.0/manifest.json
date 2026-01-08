@@ -1,9 +1,0 @@
-{
-	"namespace": "be5",
-	"tag": "grid",
-	"version": "1.0.0",
-	"htmlFile": "template.html",
-	"cssFile": "styles.css",
-	"jsFile": "script.js",
-	"previewFile": "preview.html"
-}

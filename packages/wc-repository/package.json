@@ -1,7 +1,3 @@
 {
-	"name": "wc-repository",
-
-	"scripts": {
-		"dev": "bun --hot index.ts"
-	}
+	"name": "wc-repository"
 }

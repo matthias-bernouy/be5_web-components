@@ -55,18 +55,15 @@ export async function startCreatorDev() {
 		reloading();
 	};
 
-	watcher.on("add", (path) => {
-		console.log("File changed:", path);
+	watcher.on("add", () => {
 		watchHandle();
 	});
 
-	watcher.on("change", (path) => {
-		console.log("File changed:", path);
+	watcher.on("change", () => {
 		watchHandle();
 	});
 
-	watcher.on("unlink", (path) => {
-		console.log("File changed:", path);
+	watcher.on("unlink", () => {
 		watchHandle();
 	});
 }

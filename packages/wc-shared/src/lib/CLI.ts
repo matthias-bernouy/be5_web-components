@@ -3,8 +3,17 @@ import { type Argument, Command } from "commander";
 export class CLICommand {
 	private program: Command;
 
-	constructor(name: string) {
-		this.program = new Command(name);
+	constructor(name?: string, description?: string, version?: string) {
+		this.program = new Command();
+		if (name) {
+			this.program.name(name);
+		}
+		if (description) {
+			this.program.description(description);
+		}
+		if (version) {
+			this.program.version(version);
+		}
 	}
 
 	addArgument(

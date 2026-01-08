@@ -9,7 +9,7 @@ export class Watcher {
 		});
 	}
 
-	public on(
+	on(
 		event: "add" | "change" | "unlink",
 		callback: (path: string) => void,
 	) {

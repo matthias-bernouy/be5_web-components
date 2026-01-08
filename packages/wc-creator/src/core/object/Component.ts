@@ -1,4 +1,6 @@
 import {
+	createTar,
+	del,
 	fileExists,
 	join,
 	type ManifestType,
@@ -46,6 +48,30 @@ export class Component {
 
 	getVersion(): string {
 		return this.manifest.version;
+	}
+
+	getPath(): string {
+		return this.path;
+	}
+
+	getManifest(): ManifestType {
+		return this.manifest;
+	}
+
+	getURN(): string {
+		return this.urn;
+	}
+
+	async createArchive(): Promise<void> {
+		del(join(Config.cwd, this.path, "archive.tar.gz"));
+		await this.loadPreview();
+		await this.loadScript();
+		const folderPath = join(Config.cwd, this.path);
+		createTar(
+			folderPath,
+			join(folderPath, "archive.tar.gz")
+		);
+		return Promise.resolve();
 	}
 
 	async getPreviewHTML(): Promise<string> {

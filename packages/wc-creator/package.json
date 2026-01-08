@@ -1,3 +1,6 @@
 {
-	"name": "wc-creator"
+	"name": "wc-creator",
+	"bin": {
+		"wc-creator": "./dist/bin/wc-creator.js"
+	}
 }

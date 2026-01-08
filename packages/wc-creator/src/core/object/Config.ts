@@ -1,19 +1,21 @@
-import { dirname, resolve } from "@shared";
+import { dirname, join, resolve } from "@shared";
 
 export class Config {
 	public static port: number;
 	public static repository: string;
 	public static cwd: string;
 	public static cwd_module: string;
+	public static cachePath: string;
 
 	static async initialize() {
-		if (process.env.PORT === undefined) {
+		if (process.env.CREATOR_PORT === undefined) {
 			Config.port = 8080;
 		} else {
-			Config.port = parseInt(process.env.PORT, 10);
+			Config.port = parseInt(process.env.CREATOR_PORT, 10);
 		}
+		Config.cachePath = join(process.env.HOME || "", ".cache", "web-components");
 		Config.repository =
-			process.env.REPOSITORY ?? "https://cdn.web-components.fr";
+			process.env.REPOSITORY_URL ?? "https://cdn.web-components.fr";
 		Config.cwd = process.env.CWD ?? process.cwd();
 		Config.cwd_module = resolve(
 			dirname(import.meta.url.replace("file://", "")),
@@ -26,6 +28,7 @@ export class Config {
 		return `Config:
   - port: ${Config.port}
   - repository: ${Config.repository}
+  - cache_path: ${Config.cachePath}
   - cwd: ${Config.cwd}
   - cwd_module: ${Config.cwd_module}`;
 	}

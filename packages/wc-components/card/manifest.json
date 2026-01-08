@@ -1,6 +1,6 @@
 {
 	"namespace": "be5",
-	"tag": "grid",
+	"tag": "card",
 	"version": "1.0.0",
 	"htmlFile": "template.html",
 	"cssFile": "styles.css",

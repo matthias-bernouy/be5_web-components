@@ -74,3 +74,8 @@ export function copyDir(src: string, dest: string) {
 export function del(dirPath: string) {
 	rmSync(dirPath, { recursive: true, force: true });
 }
+
+export function replaceFile(srcPath: string, destPath: string) {
+	del(destPath);
+	copyFile(srcPath, destPath);
+}
