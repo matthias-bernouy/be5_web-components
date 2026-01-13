@@ -21,21 +21,9 @@
 		"noEmit": true,
 		"composite": true,
 
-		"types": [],
-		"typeRoots": [],
-
 		"rootDir": ".",
-		"baseUrl": ".",
-
-		"paths": {
-			"@shared": ["./packages/wc-shared/index.ts"]
-		}
+		"baseUrl": "."
 	},
 
-	"files": [
-		"./packages/wc-shared/index.ts",
-		"./packages/wc-shared/types/declaration.d.ts"
-	],
-
-	"include": ["src/**/*.ts", "__scripts__/**/*.ts"]
+	"include": ["src/**/*.ts", "__scripts__/**/*.ts", "packages/wc-*/src/**/*.ts"]
 }

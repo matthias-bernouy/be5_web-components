@@ -13,7 +13,6 @@ import {
 import { Config } from "../core/Config";
 
 export async function POST_Component(req: HTTPRequest): Promise<Response> {
-	console.log("NEW REQUEST TO POST_COMPONENT");
 	const bodyBytes = await req.body.bytes();
 	if (!bodyBytes) {
 		return new Response("No body provided", { status: 400 });
@@ -21,27 +20,22 @@ export async function POST_Component(req: HTTPRequest): Promise<Response> {
 
 	const reqID = crypto.randomUUID();
 
-	await writeToFile(
-		`${Config.cwdModule}/tmp/${reqID}/archive.tar.gz`,
-		bodyBytes,
-	);
+	await writeToFile(`${Config.cwd}/tmp/${reqID}/archive.tar.gz`, bodyBytes);
 
-	mkdir(`${Config.cwdModule}/tmp/${reqID}/extracted/`);
+	mkdir(`${Config.cwd}/tmp/${reqID}/extracted/`);
 	extractAllFilesFromTar(
-		`${Config.cwdModule}/tmp/${reqID}/archive.tar.gz`,
-		`${Config.cwdModule}/tmp/${reqID}/extracted/`,
+		`${Config.cwd}/tmp/${reqID}/archive.tar.gz`,
+		`${Config.cwd}/tmp/${reqID}/extracted/`,
 	);
 
 	if (
-		!(await fileExists(
-			`${Config.cwdModule}/tmp/${reqID}/extracted/manifest.json`,
-		))
+		!(await fileExists(`${Config.cwd}/tmp/${reqID}/extracted/manifest.json`))
 	) {
 		return new Response("No manifest.json found in archive", { status: 400 });
 	}
 
 	const manifestJSON = (await readJsonFromFile(
-		`${Config.cwdModule}/tmp/${reqID}/extracted/manifest.json`,
+		`${Config.cwd}/tmp/${reqID}/extracted/manifest.json`,
 	)) as ManifestType;
 	if (!validateManifest(manifestJSON)) {
 		return new Response("Invalid manifest.json", { status: 400 });
@@ -49,22 +43,22 @@ export async function POST_Component(req: HTTPRequest): Promise<Response> {
 
 	if (
 		await fileExists(
-			`${Config.dataPath}/${manifestJSON.namespace}/${manifestJSON.tag}/${manifestJSON.version}/`,
+			`${Config.components}/${manifestJSON.namespace}/${manifestJSON.tag}/${manifestJSON.version}/`,
 		)
 	) {
 		return new Response("Component version already exists", { status: 409 });
 	}
 
 	copyDir(
-		`${Config.cwdModule}/tmp/${reqID}/extracted/`,
-		`${Config.dataPath}/${manifestJSON.namespace}/${manifestJSON.tag}/${manifestJSON.version}/`,
+		`${Config.cwd}/tmp/${reqID}/extracted/`,
+		`${Config.components}/${manifestJSON.namespace}/${manifestJSON.tag}/${manifestJSON.version}/`,
 	);
 
 	replaceFile(
-		`${Config.cwdModule}/tmp/${reqID}/archive.tar.gz`,
-		`${Config.dataPath}/${manifestJSON.namespace}/${manifestJSON.tag}/${manifestJSON.version}/archive.tar.gz`,
+		`${Config.cwd}/tmp/${reqID}/archive.tar.gz`,
+		`${Config.components}/${manifestJSON.namespace}/${manifestJSON.tag}/${manifestJSON.version}/archive.tar.gz`,
 	);
 
-	del(`${Config.cwdModule}/tmp/${reqID}/`);
+	del(`${Config.cwd}/tmp/${reqID}/`);
 	return new Response();
 }

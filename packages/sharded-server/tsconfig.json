@@ -21,21 +21,9 @@
 		"noEmit": true,
 		"composite": true,
 
-		"types": [],
-		"typeRoots": [],
-
 		"rootDir": ".",
-		"baseUrl": ".",
-
-		"paths": {
-			"@shared": ["./packages/wc-shared/index.ts"],
-			"@shared/cli": ["./packages/wc-shared/src/lib/CLI.ts"]
-		}
+		"baseUrl": "."
 	},
 
-	"files": [
-		"./packages/wc-shared/index.ts",
-		"./packages/wc-shared/types/declaration.d.ts",
-		"./packages/wc-shared/src/lib/CLI.ts"
-	]
+	"include": ["src/**/*.ts"]
 }

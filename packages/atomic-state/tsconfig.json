@@ -17,25 +17,14 @@
 		"noImplicitOverride": true,
 
 		"declaration": true,
-		"declarationMap": true,
-		"noEmit": true,
-		"composite": true,
-
-		"types": [],
-		"typeRoots": [],
+		"emitDeclarationOnly": true,
+		"declarationMap": false,
 
 		"rootDir": ".",
 		"baseUrl": ".",
 
-		"paths": {
-			"@shared": ["./packages/wc-shared/index.ts"],
-			"@shared/cli": ["./packages/wc-shared/src/lib/CLI.ts"]
-		}
+		"outDir": "dist/"
 	},
 
-	"files": [
-		"./packages/wc-shared/index.ts",
-		"./packages/wc-shared/types/declaration.d.ts",
-		"./packages/wc-shared/src/lib/CLI.ts"
-	]
+	"include": ["src/**/*.ts", "src/index.ts", "build.ts"]
 }

@@ -16,9 +16,10 @@
 		"build:all": "bun src/build/index.ts",
 		"start:creator": "bun ./build/creator/index.js",
 		
+		"build:repository": "bun src/buildRepository.ts",
+
 		"dev:creator": "bun run packages/wc-creator/index.ts",
 		"dev:repository": "bun run --watch packages/wc-repository/index.ts",
-
 		"lint": "biome lint .",
 		"check": "biome check .",
 		"lint:fix": "biome check . --fix",

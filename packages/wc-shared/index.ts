@@ -1,5 +1,6 @@
+// To optimize for tree-shaking
+
 export * from "./src/converter/urnToFolderName";
-export * from "./src/lib/CLI";
 export * from "./src/lib/file";
 export * from "./src/lib/HTTPServer";
 export {
@@ -9,7 +10,8 @@ export {
 	resolvePath as resolve,
 } from "./src/lib/path";
 export * from "./src/lib/server";
-export * from "./src/lib/tar";
+export { createTar } from "./src/lib/tar/tar.create";
+export { extractAllFilesFromTar } from "./src/lib/tar/tar.extract";
 export * from "./src/lib/watch";
 export * from "./src/lib/websocket";
 export * from "./src/parser/URNParser";

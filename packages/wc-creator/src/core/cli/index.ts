@@ -1,8 +1,8 @@
-import { CLICommand } from "@shared";
-import { CLI_ADD } from "./creator.add.cli";
-import { creatorDevCLI } from "./creator.dev.cli";
-import { creatorPublishCLI } from "./creator.publish.cli";
-import { CLI_PULL } from "./creator.pull.cli";
+import { CLICommand } from "@shared/cli";
+import { CLI_ADD } from "./add.cli";
+import { CLI_DEV } from "./dev.cli";
+import { CLI_PUBLISH } from "./publish.cli";
+import { CLI_PULL } from "./pull.cli";
 
 export function creatorCLI() {
 	const cli = new CLICommand(
@@ -11,12 +11,11 @@ export function creatorCLI() {
 		"1.0.0",
 	);
 
-	cli.addCLICommand(creatorDevCLI());
+	cli.addCLICommand(CLI_DEV());
 
 	cli.addCLICommand(CLI_PULL());
 	cli.addCLICommand(CLI_ADD());
-
-	cli.addCLICommand(creatorPublishCLI());
+	cli.addCLICommand(CLI_PUBLISH());
 
 	cli.run();
 }

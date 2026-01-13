@@ -11,15 +11,21 @@ import { Component } from "../object/Component";
 import { Config } from "../object/Config";
 
 export async function loadComponents() {
-	try {
-		return await fnRec(Config.cwd);
-	} catch (error) {
-		console.error(
-			`Error getting components from directory ${Config.cwd}:`,
-			error,
-		);
-		return {};
+	const componentsFromDir: Record<string, Component> = await fnRec(Config.cwd);
+	const componentsFromCache: Record<string, Component> = await fnRec(
+		Config.cachePath,
+	);
+
+	for (const [key, component] of Object.entries(componentsFromDir)) {
+		if (componentsFromCache[key]) {
+			console.warn(
+				`Warning: Component with URN ${key} found in both project directory and cache. Using local version.`,
+			);
+		}
+		componentsFromCache[key] = component;
 	}
+
+	return componentsFromCache;
 }
 
 async function fnRec(dir: string): Promise<Record<string, Component>> {

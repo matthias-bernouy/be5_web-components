@@ -2,7 +2,7 @@
 
 # Getting Started
 
-## CASE 1 : You want to deploy your WCR (Web Components Repository)
+## CASE 1 : You want to deploy your repository
 
 ## CASE 2 : You want to create new components
 
