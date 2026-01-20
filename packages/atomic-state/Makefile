@@ -6,7 +6,7 @@ SRC_DIR = native
 BUILD_DIR = build
 
 # 1. Lister tous les fichiers .c
-SOURCES = $(wildcard $(SRC_DIR)/*.c)
+SOURCES = $(shell find $(SRC_DIR) -name "*.c")
 
 # Options de compilation
 CC = gcc
@@ -22,7 +22,6 @@ all: $(BUILD_DIR)/$(NAME)
 $(BUILD_DIR)/$(NAME): $(SOURCES)
 	@mkdir -p $(BUILD_DIR)
 	$(CC) $(CFLAGS) $(SOURCES) -o $@ $(LDFLAGS)
-	@echo "🚀 Bibliothèque unique créée sans fichiers temporaires : $@"
 
 clean:
 	rm -rf $(BUILD_DIR)

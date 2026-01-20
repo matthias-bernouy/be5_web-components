@@ -1,15 +1,7 @@
 #ifndef IDENTITY_MAP_SYSTEM_H
 #define IDENTITY_MAP_SYSTEM_H
 
-#include <stdint.h>
-#include <stddef.h>
-#include <stdatomic.h>
-#include <stdbool.h>
-#include "../headers/Transaction.h"
-#include "../shared/ReturnCode.h"
-
-#define PROVIDER_TRANSACTION_ID 1
-
+#include "./transaction_headers.h"
 
 #define SLOT_AVAILABLE  ( 0 << 1 )
 #define SLOT_DELETED    ( 1 << 1 )
@@ -32,17 +24,18 @@ typedef struct
 
 typedef struct
 {
-    _Atomic uint32_t status;
-    uint32_t _pad;
+    _Atomic uint64_t status;
+    uint64_t current_transaction_id;
     HashIdentityData persistent_data;
     HashIdentityData staged_data;
 } HashIdentityTransactionController;
 
-extern _Atomic uint32_t counter_identity_map;
+extern _Atomic uint64_t counter_identity_map;
 extern HashIdentityTransactionController identity_hashed_map[HASHMAP_SIZE];
 
 uint64_t get_slot_state_with_comparing_hash(const uint32_t index, const uint64_t hash);
-
-uint32_t getStatus(uint32_t index);
+ReturnCodes exists(const uint8_t *key, size_t length);
+ReturnCodes link(const uint8_t *key, size_t length, uint64_t value, uint64_t id_transaction);
+TX_RESPONSE identity_map_provider_transaction(PayloadTransaction* payload, TX_STATUS tx_status);
 
 #endif

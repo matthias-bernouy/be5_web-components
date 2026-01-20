@@ -1,8 +1,8 @@
-#include "./identity_map.h"
+#include "../headers/identity_map_headers.h"
 
 ReturnCodes exists(const uint8_t *key, size_t length)
 {
-    uint64_t h = hash(key, length);
+    uint64_t h = xxh32_fixed(key, length, 0);
     uint32_t index = (uint32_t)(h & HASHMAP_MASK);
     uint32_t max_iterations = 500;
 

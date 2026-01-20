@@ -1,6 +1,6 @@
-#include "XXHash32.h"
+#include "../headers/shared_headers.h"
 
-// Constantes XXHash32
+// Constants XXHash32
 static const uint32_t PRIME32_1 = 2654435761U;
 static const uint32_t PRIME32_2 = 2246822519U;
 static const uint32_t PRIME32_3 = 3266489917U;
@@ -24,7 +24,6 @@ uint32_t xxh32_fixed(const void* input, size_t len, uint32_t seed) {
         uint32_t v4 = seed - PRIME32_1;
 
         do {
-            // Ici on lit par blocs de 4 octets (optimisé par le CPU)
             v1 += (*(const uint32_t*)p) * PRIME32_2; v1 = rotl32(v1, 13); v1 *= PRIME32_1; p += 4;
             v2 += (*(const uint32_t*)p) * PRIME32_2; v2 = rotl32(v2, 13); v2 *= PRIME32_1; p += 4;
             v3 += (*(const uint32_t*)p) * PRIME32_2; v3 = rotl32(v3, 13); v3 *= PRIME32_1; p += 4;

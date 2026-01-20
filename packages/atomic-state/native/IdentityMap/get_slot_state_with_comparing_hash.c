@@ -1,19 +1,20 @@
-#include "./identity_map.h"
+#include "../headers/identity_map_headers.h"
 
 uint64_t get_slot_state_with_comparing_hash(const uint32_t index, const uint64_t hash)
 {
-    uint32_t max_iterations = 500;
+    uint32_t max_iterations = 1024;
     uint32_t return_status = SLOT_AVAILABLE;
     uint64_t timestamp = 0x000000000000000;
 
     while (max_iterations--)
     {
-        uint64_t status = getStatus(index);
+        uint64_t status = get_status(&identity_hashed_map[index].status);
         uint64_t hash_in_slot;
+        uint64_t current_transaction_id = atomic_load_explicit(&identity_hashed_map[index].current_transaction_id, memory_order_acquire);
 
-        if (status == TX_STAGED){
+        if (status == TX_ELEMENT_STAGED){
             hash_in_slot = identity_hashed_map[index].staged_data.hash;
-        } else if (status == TX_LOCKED){
+        } else if (status == TX_ELEMENT_LOCKED){
             uint64_t timestamp_to_compare = get_now_nanoseconds();
             if (timestamp == 0x000000000000000){
                 timestamp = timestamp_to_compare;
@@ -39,8 +40,9 @@ uint64_t get_slot_state_with_comparing_hash(const uint32_t index, const uint64_t
             return_status = SLOT_USED;
         }
 
-        uint64_t status_verify = getStatus(index);
-        if (status != status_verify){
+        uint64_t status_verify = get_status(&identity_hashed_map[index].status);
+        uint64_t verify_transaction_id = atomic_load_explicit(&identity_hashed_map[index].current_transaction_id, memory_order_acquire);
+        if (status != status_verify || current_transaction_id != verify_transaction_id){
             max_iterations++;
             _mm_pause();
             continue;
@@ -49,4 +51,5 @@ uint64_t get_slot_state_with_comparing_hash(const uint32_t index, const uint64_t
         }
 
     }
+    return SLOT_TIMEOUT;
 }
