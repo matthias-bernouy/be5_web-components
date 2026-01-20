@@ -1,5 +1,3 @@
-import { AtomicStateBuilder } from "@befive/atomic-state";
-import { MyAtomicState } from "./generated/AtomicState";
 import fs from "fs/promises";
 
 // Get all files from the "src/data/schema" directory

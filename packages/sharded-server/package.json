@@ -1,3 +1,11 @@
 {
-    "name": "@befive/multiworkers"
+    "name": "@befive/sharded-server",
+    "version": "0.0.1",
+    "description": "befive decentralized sharded server implementation",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "schema:build": "bun AtomicStateBuilder.ts",
+        "dev": "bun src/index.ts"
+    }
 }

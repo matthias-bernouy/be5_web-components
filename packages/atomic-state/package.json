@@ -1,5 +1,5 @@
 {
-    "name": "@befive/atomic-state",
+    "name": "@befive/atomic-shared",
     "version": "0.0.1",
     "description": "A multi worker state with atomic locks",
     "main": "dist/index.js",

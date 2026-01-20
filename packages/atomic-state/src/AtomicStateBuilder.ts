@@ -7,22 +7,26 @@ type FieldType =
 	| "uint16"
 	| "int32"
 	| "uint32"
+	| "int64"
+	| "uint64"
 	| "float32"
 	| "float64"
 	| "string";
 
-const TYPE_MAP: Record<FieldType, { size: number; get: string; set: string }> =
-	{
-		int8: { size: 1, get: "getInt8", set: "setInt8" },
-		uint8: { size: 1, get: "getUint8", set: "setUint8" },
-		int16: { size: 2, get: "getInt16", set: "setInt16" },
-		uint16: { size: 2, get: "getUint16", set: "setUint16" },
-		int32: { size: 4, get: "getInt32", set: "setInt32" },
-		uint32: { size: 4, get: "getUint32", set: "setUint32" },
-		float32: { size: 4, get: "getFloat32", set: "setFloat32" },
-		float64: { size: 8, get: "getFloat64", set: "setFloat64" },
-		string: { size: 1, get: "getUint8", set: "setUint8" },
-	};
+const TYPE_MAP: Record<FieldType, { size: number; get: string; set: string, ret: string }> =
+{
+	int8: { size: 1, get: "getInt8", set: "setInt8", ret: "number" },
+	uint8: { size: 1, get: "getUint8", set: "setUint8", ret: "number" },
+	int16: { size: 2, get: "getInt16", set: "setInt16", ret: "number" },
+	uint16: { size: 2, get: "getUint16", set: "setUint16", ret: "number" },
+	int32: { size: 4, get: "getInt32", set: "setInt32", ret: "number" },
+	uint32: { size: 4, get: "getUint32", set: "setUint32", ret: "number" },
+	int64: { size: 8, get: "getBigInt64", set: "setBigInt64", ret: "bigint" },
+	uint64: { size: 8, get: "getBigUint64", set: "setBigUint64", ret: "bigint" },
+	float32: { size: 4, get: "getFloat32", set: "setFloat32", ret: "number" },
+	float64: { size: 8, get: "getFloat64", set: "setFloat64", ret: "number" },
+	string: { size: 1, get: "getUint8", set: "setUint8", ret: "string" },
+};
 
 interface FieldDefinition {
 	name: string;
@@ -91,6 +95,8 @@ export class AtomicStateBuilder {
 			uint16: "Uint16Array",
 			int32: "Int32Array",
 			uint32: "Uint32Array",
+			int64: "BigInt64Array",
+			uint64: "BigUint64Array",
 			float32: "Float32Array",
 			float64: "Float64Array",
 			string: "Uint8Array",
@@ -104,7 +110,7 @@ export class AtomicStateBuilder {
 		const arrayType = this.getTypedArray()[field.type];
 		if (field.type === "string") {
 			return `
-    get ${field.name}(): string {
+    get ${field.name}(): ${config.ret} {
         const arr = new Uint8Array(this._view.buffer, this._view.byteOffset + this._offset + ${field.offset}, ${field.length ?? 1});
         const end = arr.indexOf(0);
         return new TextDecoder().decode(end === -1 ? arr : arr.subarray(0, end));
@@ -122,7 +128,7 @@ get ${field.name}(): ${arrayType} {
         `;
 		}
 		return `
-get ${field.name}(): number {
+get ${field.name}(): ${config.ret} {
     return this._view.${config.get}(this._offset + ${field.offset}${endian});
 }
         `;
@@ -134,7 +140,7 @@ get ${field.name}(): number {
 		const arrayType = this.getTypedArray()[field.type];
 		if (field.type === "string") {
 			return `
-    set ${field.name}(v: string) {
+    set ${field.name}(v: ${config.ret}) {
         const arr = new Uint8Array(this._view.buffer, this._view.byteOffset + this._offset + ${field.offset}, ${field.length ?? 1});
         arr.fill(0); // On nettoie l'ancien contenu
         const encoded = new TextEncoder().encode(v);
@@ -144,7 +150,7 @@ get ${field.name}(): number {
 		}
 		if (field.length) {
 			return `
-    set ${field.name}(v: ${arrayType} | number[]) {
+    set ${field.name}(v: ${arrayType} | ${config.ret}[]) {
         if (v.length > ${field.length}) {
             throw new Error(\`[AtomicState] Array overflow for "${field.name}": expected ${field.length}, got \${v.length}\`);
         }
@@ -153,7 +159,7 @@ get ${field.name}(): number {
     }`;
 		}
 		return `
-            set ${field.name}(v: number) {
+            set ${field.name}(v: ${config.ret}) {
                 this._view.${config.set}(this._offset + ${field.offset}, v${endian});
             }
         `;

@@ -26,5 +26,5 @@
 		"outDir": "dist/"
 	},
 
-	"include": ["src/**/*.ts", "src/index.ts", "build.ts"]
+	"include": ["src/**/*.ts", "src/index.ts", "build.ts", "benchs/**/*", "index.ts"]
 }
